@@ -2,6 +2,7 @@ from madison_axi.axi import *
 from random import *
 
 initialize()
+
 size = 150
 width = 30
 height = 70
@@ -75,8 +76,8 @@ def draw_character(what):
     space_x(10)
 
 def draw_timer():
-    space_y(-15-(3*(size//4)))
     space_x(20)
+    original_pos = get_position()
     draw_character(randrange(1,4))
     space_x((width+3)//2)
     draw_character(":")
@@ -84,21 +85,26 @@ def draw_timer():
     for _ in range(2):
         draw_character(randrange(1,4))
         space_x(width+3)
-    space_x(-(20+((width+3)//2)+(width//2)+(width+3)+(width+3)))
-    pen_down()
-    point_in_direction(270)
-    move_forward(100)
+    pen_up()
+    move_to(original_pos[0],original_pos[1])
 
-def draw_mod():
+def draw_mod(modchoice):
     space_x(20)
-    modchoice = randrange(3) # 0=Button 1=Circle 2=Password
-    modchoice = 0
+    # 0=Button 1=Circle 2=Keypad
     if modchoice == 0:
         sides = randrange(3,7)
         pen_down()
         for _ in range(sides):
-            move_forward(size/sides)
-            turn_left(360/sides)
+            move_forward(size//sides)
+            turn_left(360//sides)
+    if modchoice == 2:
+        sides = range(4)
+        pen_down()
+        for _ in range(3):
+            for _ in range(sides):
+                move_forward(size//sides)
+                turn_left(360//sides)
+            move_forward(size//sides)
 
 # Draw module borders
 move_to(-350,220)
@@ -112,13 +118,15 @@ for _ in range(2):
 # Start filling in modules
 move_to(-350,220)
 # Timer or module (Mod 0)
+space_y(-15-(3*(size//4)))
 if timer_pos == 0:
     draw_timer()
 else:
-    draw_mod()
+    draw_mod(2)
+space_x(size)
 # Other one (Mod 1)
 if timer_pos == 1:
     draw_timer()
 else:
-    draw_mod()
+    draw_mod(2)
 cleanup()
