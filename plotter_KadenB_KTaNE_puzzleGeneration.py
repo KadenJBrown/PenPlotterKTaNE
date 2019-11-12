@@ -1,3 +1,7 @@
+# Kaden Brown
+
+# Art inspired off the game Keep Talking and Nobody Explodes
+
 from madison_axi.axi import *
 from random import *
 
@@ -93,18 +97,32 @@ def draw_mod(modchoice):
     # 0=Button 1=Circle 2=Keypad
     if modchoice == 0:
         sides = randrange(3,7)
+        move_forward((size*0.5))
         pen_down()
         for _ in range(sides):
             move_forward(size//sides)
             turn_left(360//sides)
+        pen_up()
+        move_forward(-(size*0.5))
+    if modchoice == 1:
+        pen_up()
+        move_forward((size*0.5))
+        pen_down()
+        for _ in range(360//3):
+            move_forward(1)
+            turn_left(3)
+        pen_up()
+        move_forward(-(size*0.5))
     if modchoice == 2:
-        sides = range(4)
+        sides = 4
         pen_down()
         for _ in range(3):
             for _ in range(sides):
                 move_forward(size//sides)
                 turn_left(360//sides)
             move_forward(size//sides)
+        pen_up()
+        move_forward(-((size//sides)*3))
 
 # Draw module borders
 move_to(-350,220)
@@ -122,11 +140,20 @@ space_y(-15-(3*(size//4)))
 if timer_pos == 0:
     draw_timer()
 else:
-    draw_mod(2)
+    draw_mod(randrange(3))
 space_x(size)
 # Other one (Mod 1)
 if timer_pos == 1:
     draw_timer()
 else:
-    draw_mod(2)
+    draw_mod(randrange(3))
+# Mod 2
+space_x(size)
+draw_mod(randrange(3))
+# Next line
+pen_up()
+move_to(-350,220-15-size-(size/2))
+for _ in range(3):
+    draw_mod(randrange(3))
+    space_x(size)
 cleanup()
